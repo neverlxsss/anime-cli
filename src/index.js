@@ -9,9 +9,9 @@ import { config, loadConfig, saveConfig } from './config/index.js';
 
 
 // Comment this while dev. This fixes ctrl + c close errors
-//process.on('unhandledRejection', () => {
+process.on('unhandledRejection', () => {
 // pass
-//});
+});
 
 const bootstrap = async (setAll = false) => {
   await loadConfig();
@@ -156,10 +156,10 @@ const bootstrap = async (setAll = false) => {
     if (config.ANISKIP.value) {
       launchStr += ` $(ani-skip "${selectedAnimeOriginalTitle}" ${selectedEpisode})`;
     }
-    console.log(launchStr);
+
     exec(launchStr);
 
-    //clear();
+    clear();
     choice = await select({
       message: `Playing episode ${selectedEpisode}/${episodes.at(episodes.length - 1)} of ${selectedAnimeName}`,
       choices: [
