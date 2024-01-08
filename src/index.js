@@ -9,9 +9,9 @@ import { config, loadConfig, saveConfig } from './config/index.js';
 
 
 // Comment this while dev. This fixes ctrl + c close errors
-process.on('unhandledRejection', () => {
-  // pass
-});
+//process.on('unhandledRejection', () => {
+// pass
+//});
 
 const bootstrap = async (setAll = false) => {
   await loadConfig();
@@ -56,6 +56,7 @@ const bootstrap = async (setAll = false) => {
   });
 
   const selectedAnimeName = formattedShikimoryList.find(a => a.value === selectedAnimeId).name;
+  const selectedAnimeOriginalTitle = shikimoryList.find(a => a.id === selectedAnimeId).name;
 
   clear();
   const kodikList = await kodikSearch(selectedAnimeId);
@@ -151,9 +152,14 @@ const bootstrap = async (setAll = false) => {
       streamLink = `https:${streamLink}`;
     }
 
-    exec(`mpv ${config.MPV_ADDITIONAL_PARAMS.value} ${streamLink} --title="${selectedAnimeName} // episode ${selectedEpisode}"`);
+    let launchStr = `mpv ${config.MPV_ADDITIONAL_PARAMS.value} ${streamLink} --title="${selectedAnimeName} // episode ${selectedEpisode}"`;
+    if (config.ANISKIP.value) {
+      launchStr += ` $(ani-skip "${selectedAnimeOriginalTitle}" ${selectedEpisode})`;
+    }
+    console.log(launchStr);
+    exec(launchStr);
 
-    clear();
+    //clear();
     choice = await select({
       message: `Playing episode ${selectedEpisode}/${episodes.at(episodes.length - 1)} of ${selectedAnimeName}`,
       choices: [

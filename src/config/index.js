@@ -4,6 +4,7 @@ import path from 'path';
 export let config = {
   KODIK_TOKEN: {required: true, value: null},
   MPV_ADDITIONAL_PARAMS: {required: false, value: null},
+  ANISKIP: {required: false, value: false},
 };
 const dirPath = path.join(process.env.HOME, '.config/anime-cli');
 const filePath = `${dirPath}/config.json`;
@@ -20,7 +21,9 @@ export const loadConfig = async () => {
     await saveConfig();
   }
   const file = await fs.readFile(filePath);
-  config = JSON.parse(file.toString());
+  const loadedConfig = JSON.parse(file.toString());
+
+  config = { ...config, ...loadedConfig };
 };
 
 export const saveConfig = async () => {
