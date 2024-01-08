@@ -19,18 +19,17 @@ const bootstrap = async (setAll = false) => {
   for (const key in config) {
     if (Object.hasOwnProperty.call(config, key)) {
       const property = config[key];
-      if (!property.value && (property.required || setAll)) {
+      if ((!property.value && property.required) || setAll) {
         config[key].value = await input({ message: `Set ${key}. Current value ${property.value}:` });
       }
     }
   }
-
+  
   await saveConfig();
 };
 
 (async () => {
-  const args = process.argv.slice(2);
-  await bootstrap(args.includes('--config'));
+  await bootstrap(process.argv.includes('--config'));
 
   clear();
   const animeName = await input({ message: 'Search anime:' });
@@ -146,8 +145,13 @@ const bootstrap = async (setAll = false) => {
   while (choice !== 'quit') {
     choice = null;
     streamInfo = await kodikExtractLinks(selectedKodikAnimeInfo.seasons[selectedSeason.toString()].episodes[selectedEpisode.toString()]);
-    const streamLink = streamInfo.links[selectedQuality.toString()][0].src;
-    exec(`mpv ${config.MPV_ADDITIONAL_PARAMS.value} https:${streamLink}`);
+    let streamLink = streamInfo.links[selectedQuality.toString()][0].src;
+
+    if (streamLink.startsWith('//')) {
+      streamLink = `https:${streamLink}`;
+    }
+
+    exec(`mpv ${config.MPV_ADDITIONAL_PARAMS.value} ${streamLink} --title="${selectedAnimeName} // episode ${selectedEpisode}"`);
 
     clear();
     choice = await select({
