@@ -15,8 +15,9 @@
   },
   "scripts": {
     "build": "ncc build ./src/index.js -o build",
+    "build:watch": "ncc build ./src/index.js -o build --watch",
     "make:executable": "cd build && pkg index.js -o ../dist/anime-cli --targets=node18-linux-x64,node18-win-x64,node18-macos-x64",
-    "start": "node ./src/index.js",
+    "start": "node ./build/index.js",
     "prettier": "prettier --config .prettierrc --write ."
   },
   "author": "Tony Sanin <sanin.tony.dev@gmail.com>",

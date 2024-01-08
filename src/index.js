@@ -8,6 +8,11 @@ import { kodikSearch, kodikExtractLinks } from './api/kodik.js';
 import { config, loadConfig, saveConfig } from './config/index.js';
 
 
+// Comment this while dev. This fixes ctrl + c close errors
+process.on('unhandledRejection', () => {
+  // pass
+});
+
 const bootstrap = async (setAll = false) => {
   await loadConfig();
 
@@ -31,6 +36,10 @@ const bootstrap = async (setAll = false) => {
   const animeName = await input({ message: 'Search anime:' });
 
   const shikimoryList = await shikimoriSearch(animeName);
+
+  if (!shikimoryList.length) {
+    return console.log('Nothing found');
+  }
 
   const formattedShikimoryList = shikimoryList.map((animeInfo) => {
     return {
