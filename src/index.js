@@ -52,7 +52,7 @@ const bootstrap = async (setAll = false) => {
     message: 'Select anime from the list:',
     choices: formattedShikimoryList,
     loop: false,
-    pageSize: formattedShikimoryList.length
+    pageSize: 10
   });
 
   const selectedAnimeName = formattedShikimoryList.find(a => a.value === selectedAnimeId).name;
@@ -76,7 +76,7 @@ const bootstrap = async (setAll = false) => {
     message: 'Select translation from the list:',
     choices: formattedKodikList,
     loop: false,
-    pageSize: formattedKodikList.length
+    pageSize: 10
   });
 
   const selectedKodikAnimeInfo = kodikList.results.find(a => a.id === selectedTranslationId);
